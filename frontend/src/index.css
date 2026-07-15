@@ -121,8 +121,13 @@
     /* Filet de sécurité mobile : un débordement horizontal ponctuel (texte
        long, composant tiers) ne doit jamais faire apparaître un scroll
        horizontal sur toute la page — seul le contenu concerné doit gérer
-       son propre dépassement (troncature, défilement interne, etc.). */
-    overflow-x: hidden;
+       son propre dépassement (troncature, défilement interne, etc.).
+       `clip` plutôt que `hidden` : `overflow-x: hidden` transforme l'ancêtre
+       en conteneur de défilement, ce qui casse `position: sticky` sur ses
+       descendants (header de navigation) dans plusieurs navigateurs — bug
+       connu, particulièrement sur Safari. `clip` bloque le débordement sans
+       créer ce conteneur de scroll, donc sans effet de bord sur le sticky. */
+    overflow-x: clip;
   }
 
   html.dark {
@@ -132,7 +137,7 @@
   body {
     @apply bg-background text-foreground font-body antialiased;
     font-feature-settings: 'tnum' 1, 'lnum' 1;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   /* Supprime le délai de zoom au double-tap sur les éléments interactifs :

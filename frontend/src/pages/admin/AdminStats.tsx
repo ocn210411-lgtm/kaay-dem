@@ -63,20 +63,20 @@ function KpiCard({
   const enHausse = kpi.croissance_pct >= 0
 
   return (
-    <Card>
+    <Card className="min-w-0">
       <CardContent className="pt-6">
         <div className="flex items-center justify-between mb-2">
           <p className="text-sm text-muted-foreground">{label}</p>
-          <Icon className="size-4 text-muted-foreground" aria-hidden="true" />
+          <Icon className="size-4 text-muted-foreground shrink-0" aria-hidden="true" />
         </div>
-        <p className="font-display font-bold text-3xl text-nuit-800">
+        <p className="font-display font-bold text-xl sm:text-3xl text-nuit-800 truncate">
           {formatFn(kpi.total)}
-          {suffix && <span className="text-base font-body font-normal text-muted-foreground ml-1">{suffix}</span>}
+          {suffix && <span className="text-sm sm:text-base font-body font-normal text-muted-foreground ml-1">{suffix}</span>}
         </p>
-        <div className="flex items-center gap-1.5 mt-1.5 text-xs">
+        <div className="flex items-center gap-1.5 mt-1.5 text-xs flex-wrap">
           <span
             className={cn(
-              'flex items-center gap-0.5 font-medium',
+              'flex items-center gap-0.5 font-medium shrink-0',
               enHausse ? 'text-lagune-600' : 'text-braise-600'
             )}
           >
@@ -87,7 +87,7 @@ function KpiCard({
             )}
             {Math.abs(kpi.croissance_pct)}%
           </span>
-          <span className="text-muted-foreground">
+          <span className="text-muted-foreground truncate">
             vs mois dernier · {kpi.ce_mois} ce mois-ci
           </span>
         </div>
@@ -103,7 +103,7 @@ export function AdminStats() {
     return (
       <div className="mx-auto max-w-6xl px-4 py-10 space-y-4">
         <Skeleton className="h-8 w-1/3" />
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-28 rounded-xl" />
           ))}
@@ -141,7 +141,7 @@ export function AdminStats() {
       </div>
 
       {/* Croissance des utilisateurs + revenus par mois */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="font-display text-lg flex items-center gap-2">
@@ -207,7 +207,7 @@ export function AdminStats() {
       </div>
 
       {/* Trajets par mois + répartition des réservations */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="font-display text-lg">Trajets publiés par mois</CardTitle>
@@ -272,7 +272,7 @@ export function AdminStats() {
       </div>
 
       {/* Villes populaires + indicateurs qualité */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="font-display text-lg">Villes de départ les plus populaires</CardTitle>
@@ -329,7 +329,7 @@ export function AdminStats() {
       </div>
 
       {/* Top conducteurs + activité récente */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="font-display text-lg">Top conducteurs</CardTitle>
@@ -340,14 +340,14 @@ export function AdminStats() {
             ) : (
               <ol className="space-y-3">
                 {data.top_conducteurs.map((c, i) => (
-                  <li key={c.id} className="flex items-center justify-between text-sm">
-                    <span className="flex items-center gap-2">
+                  <li key={c.id} className="flex items-center justify-between gap-2 text-sm">
+                    <span className="flex items-center gap-2 min-w-0">
                       <span className="flex items-center justify-center size-6 rounded-full bg-nuit-800 text-sable-50 text-xs font-mono shrink-0">
                         {i + 1}
                       </span>
-                      <span className="font-medium">{c.nom}</span>
+                      <span className="font-medium truncate min-w-0">{c.nom}</span>
                     </span>
-                    <span className="text-muted-foreground font-mono">
+                    <span className="text-muted-foreground font-mono shrink-0 whitespace-nowrap text-xs sm:text-sm">
                       {c.trajets_count} trajet(s)
                       {c.note_moyenne != null ? ` · ${c.note_moyenne.toFixed(1)}★` : ''}
                     </span>

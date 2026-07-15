@@ -81,7 +81,7 @@ export function AuthLayout({
   quoteAuthor: string
 }) {
   return (
-    <div className="grid lg:grid-cols-2 min-h-[calc(100dvh-4rem)]">
+    <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[calc(100dvh-4rem)]">
       <BrandPanel quote={quote} quoteAuthor={quoteAuthor} />
       <div className="flex items-center justify-center px-4 py-12 sm:py-16">
         <div className="w-full max-w-sm">{children}</div>
