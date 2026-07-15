@@ -24,5 +24,19 @@ return [
             'driver' => 'monolog',
             'handler' => \Monolog\Handler\NullHandler::class,
         ],
+
+        // Utilisé en production (Render) : le disque du conteneur est
+        // éphémère, donc écrire dans storage/logs/laravel.log serait perdu
+        // et invisible depuis le tableau de bord Render, qui n'affiche que
+        // la sortie standard/erreur du processus.
+        'stderr' => [
+            'driver' => 'monolog',
+            'handler' => StreamHandler::class,
+            'formatter' => env('LOG_STDERR_FORMATTER'),
+            'with' => [
+                'stream' => 'php://stderr',
+            ],
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
     ],
 ];

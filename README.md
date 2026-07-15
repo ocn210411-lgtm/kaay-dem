@@ -172,3 +172,45 @@ produit (route, trajet, voiture).
 3. Se connecter avec `conducteur@kaaydem.test` / `password`, accepter la réservation depuis
    « Mes réservations » → onglet **Reçues**.
 4. Se connecter avec `admin@kaaydem.test` / `password`, consulter `/admin/stats`.
+
+## Déploiement gratuit (GitHub + Render)
+
+Le dépôt inclut un Blueprint Render (`render.yaml`) qui provisionne les 3 services gratuits
+nécessaires en un clic : l'API Laravel (Docker), le frontend React (site statique) et une base
+PostgreSQL.
+
+### Pourquoi PostgreSQL et pas MySQL ?
+
+Le tiers gratuit de Render ne propose pas de MySQL managé — seulement PostgreSQL. Le code est
+agnostique du moteur (`config/database.php` définit les deux connexions) ; les rares endroits où
+la syntaxe SQL diverge réellement entre les deux bases (formatage de date pour le regroupement par
+mois, division entière) sont gérés explicitement dans `StatsController::formatMoisSql()` et
+documentés en commentaire. **Testé en conditions réelles sur une vraie base PostgreSQL locale**
+(migrations, seeders, recherche de trajets, réservation, statistiques admin) avant d'écrire cette
+section — pas seulement supposé fonctionner.
+
+### Étapes
+
+1. **Pousser le code sur GitHub** (déjà fait si tu lis ce fichier depuis le dépôt cloné).
+2. Sur [render.com](https://render.com), **New** → **Blueprint** → connecter le dépôt GitHub
+   `kaay-dem`. Render détecte automatiquement `render.yaml` et propose de créer les 3 services.
+3. Valider — Render construit et déploie l'API, le frontend et la base en quelques minutes.
+4. Une fois l'API en ligne, exécuter le seeding depuis l'onglet **Shell** du service backend sur
+   le dashboard Render :
+   ```bash
+   php artisan db:seed
+   ```
+
+### Limites du tiers gratuit à connaître
+
+- **Disque éphémère** : les fichiers uploadés (photos de profil, documents conducteur) ne
+  survivent pas à un redéploiement du service backend. Pour une vraie persistance, brancher soit
+  un disque payant Render, soit un stockage externe compatible S3 (ex. Cloudflare R2, gratuit
+  jusqu'à un certain volume) sur le disque `public`.
+- **Mise en veille** : un service web gratuit s'endort après un moment d'inactivité et met
+  ~30-60 secondes à redémarrer au prochain appel — normal, pas un bug.
+- **Si Render attribue des noms de service différents** de ceux du Blueprint (`kaay-dem-backend`,
+  `kaay-dem-frontend`, en cas de collision de nom), les URLs générées changeront
+  (`https://<nom>.onrender.com`). Il faut alors mettre à jour manuellement, dans le dashboard
+  Render : `VITE_API_URL` (frontend) ainsi que `APP_URL`, `FRONTEND_URL` et
+  `SANCTUM_STATEFUL_DOMAINS` (backend), puis redéployer les deux services.

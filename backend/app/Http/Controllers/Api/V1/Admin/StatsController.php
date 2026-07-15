@@ -8,9 +8,25 @@ use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class StatsController extends Controller
 {
+    /**
+     * DATE_FORMAT() est spécifique à MySQL — l'app doit aussi tourner sur
+     * PostgreSQL (déploiement Render, seule base gérée gratuitement par leur
+     * plateforme). On choisit l'expression SQL équivalente selon le driver
+     * actif plutôt que de figer une syntaxe qui casserait silencieusement
+     * les statistiques sur un autre moteur.
+     */
+    private function formatMoisSql(string $colonne): string
+    {
+        return match (DB::connection()->getDriverName()) {
+            'pgsql' => "TO_CHAR({$colonne}, 'YYYY-MM')",
+            'sqlite' => "strftime('%Y-%m', {$colonne})",
+            default => "DATE_FORMAT({$colonne}, '%Y-%m')",
+        };
+    }
     public function index(Request $request)
     {
         $debutMois = Carbon::now()->startOfMonth();
@@ -28,10 +44,15 @@ class StatsController extends Controller
             'trajets_par_mois' => $this->serieParMois(Trip::query(), 'date_heure_depart'),
             'revenus_par_mois' => $this->revenusParMois(),
             'reservations_par_statut' => $this->reservationsParStatut(),
+            // CAST(... AS DECIMAL) force une division flottante sur les deux
+            // moteurs : sans lui, PostgreSQL tronque une division entier/entier
+            // (contrairement à MySQL qui la promeut automatiquement en
+            // décimal), ce qui aurait silencieusement renvoyé 0 pour tous les
+            // trajets une fois déployé sur Render (Postgres).
             'taux_occupation_moyen' => round((float) (
                 Trip::query()
                     ->where('statut', '!=', 'annule')
-                    ->selectRaw('AVG((places_totales - places_disponibles) / places_totales) as taux')
+                    ->selectRaw('AVG(CAST(places_totales - places_disponibles AS DECIMAL) / NULLIF(places_totales, 0)) as taux')
                     ->value('taux') ?? 0
             ), 2),
             'taux_annulation' => $this->tauxAnnulation(),
@@ -100,7 +121,7 @@ class StatsController extends Controller
     private function serieParMois($query, string $dateColonne)
     {
         return (clone $query)
-            ->selectRaw("DATE_FORMAT({$dateColonne}, '%Y-%m') as mois, COUNT(*) as total")
+            ->selectRaw("{$this->formatMoisSql($dateColonne)} as mois, COUNT(*) as total")
             ->groupBy('mois')
             ->orderBy('mois')
             ->get();
@@ -125,10 +146,12 @@ class StatsController extends Controller
 
     private function revenusParMois()
     {
+        $formatMois = $this->formatMoisSql('reservations.created_at');
+
         return Reservation::query()
             ->whereIn('reservations.statut', ['confirmee', 'terminee'])
             ->join('trips', 'trips.id', '=', 'reservations.trip_id')
-            ->selectRaw("DATE_FORMAT(reservations.created_at, '%Y-%m') as mois, COALESCE(SUM(reservations.nombre_places * trips.prix_place), 0) as total")
+            ->selectRaw("{$formatMois} as mois, COALESCE(SUM(reservations.nombre_places * trips.prix_place), 0) as total")
             ->groupBy('mois')
             ->orderBy('mois')
             ->get();

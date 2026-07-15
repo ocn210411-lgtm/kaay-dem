@@ -22,6 +22,25 @@ return [
             'strict' => true,
             'engine' => null,
         ],
+
+        // Utilisée en production (Render) : leur offre gratuite ne propose
+        // qu'une base PostgreSQL managée (pas de MySQL gratuit). Le reste du
+        // code est agnostique du moteur (cf. StatsController::formatMoisSql
+        // pour les seuls endroits où la syntaxe SQL diverge réellement).
+        'pgsql' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'kaaydem'),
+            'username' => env('DB_USERNAME', 'postgres'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
     ],
 
     'migrations' => [

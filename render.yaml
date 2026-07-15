@@ -1,0 +1,86 @@
+# Blueprint Render — déploie en un clic les 3 services gratuits nécessaires :
+# l'API Laravel (Docker), le frontend React (site statique) et la base
+# PostgreSQL. Sur render.com : "New" → "Blueprint" → connecter ce dépôt.
+#
+# Important : si Render attribue des noms différents de ceux ci-dessous
+# (ex. collision avec un service existant), les URLs générées changeront
+# (https://<nom>.onrender.com) — il faudra alors mettre à jour manuellement
+# FRONTEND_URL / SANCTUM_STATEFUL_DOMAINS (côté backend) et VITE_API_URL
+# (côté frontend) dans le dashboard Render. Voir le README pour le détail.
+
+databases:
+  - name: kaay-dem-db
+    plan: free
+    databaseName: kaaydem
+    user: kaaydem
+
+services:
+  - name: kaay-dem-backend
+    type: web
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: "Kaay Dem"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        value: https://kaay-dem-backend.onrender.com
+      - key: APP_LOCALE
+        value: fr
+      - key: APP_FALLBACK_LOCALE
+        value: en
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: error
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kaay-dem-db
+          property: connectionString
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_LIFETIME
+        value: "120"
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: FILESYSTEM_DISK
+        value: public
+      - key: MAIL_MAILER
+        value: log
+      # Domaine du frontend statique, pour CORS + Sanctum (auth par Bearer
+      # token, pas de cookies cross-origin — ces réglages sont surtout un
+      # filet de sécurité, cf. commentaires dans config/cors.php).
+      - key: FRONTEND_URL
+        value: https://kaay-dem-frontend.onrender.com
+      - key: SANCTUM_STATEFUL_DOMAINS
+        value: kaay-dem-frontend.onrender.com
+      - key: SESSION_DOMAIN
+        value: .onrender.com
+
+  - name: kaay-dem-frontend
+    type: web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://kaay-dem-backend.onrender.com/api/v1
+    routes:
+      # Application React monopage (react-router) : toute URL doit servir
+      # index.html, sinon un rechargement sur /trajets/3 renverrait un 404.
+      - type: rewrite
+        source: /*
+        destination: /index.html
