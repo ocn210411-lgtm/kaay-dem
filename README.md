@@ -195,14 +195,20 @@ section — pas seulement supposé fonctionner.
 2. Sur [render.com](https://render.com), **New** → **Blueprint** → connecter le dépôt GitHub
    `kaay-dem`. Render détecte automatiquement `render.yaml` et propose de créer les 3 services.
 3. Valider — Render construit et déploie l'API, le frontend et la base en quelques minutes.
-4. Une fois l'API en ligne, exécuter le seeding depuis l'onglet **Shell** du service backend sur
-   le dashboard Render :
-   ```bash
-   php artisan db:seed
-   ```
+4. Rien d'autre à faire : le seeding se lance **automatiquement** au premier démarrage du backend
+   (voir plus bas — le Shell Render, nécessaire pour lancer `php artisan db:seed` à la main, est
+   réservé aux instances payantes).
 
 ### Limites du tiers gratuit à connaître
 
+- **Pas de Shell ni de "One-Off Jobs"** sur les instances gratuites — impossible de lancer une
+  commande Artisan à la main une fois déployé. Contourné avec une commande dédiée,
+  `php artisan app:seed-if-empty` (appelée automatiquement par `docker-entrypoint.sh` à chaque
+  démarrage) : elle ne seed que si la base est vide, jamais si des données existent déjà — donc
+  aucun risque de dupliquer les données de démo à chaque redémarrage/redéploiement.
+- **Une seule base PostgreSQL gratuite par compte Render.** Si tu as déjà un autre projet avec une
+  base gratuite, il faut la supprimer avant de déployer ce Blueprint (Render refuse d'en créer une
+  deuxième et annule la création des autres services en cascade).
 - **Disque éphémère** : les fichiers uploadés (photos de profil, documents conducteur) ne
   survivent pas à un redéploiement du service backend. Pour une vraie persistance, brancher soit
   un disque payant Render, soit un stockage externe compatible S3 (ex. Cloudflare R2, gratuit

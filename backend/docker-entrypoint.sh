@@ -23,6 +23,13 @@ php artisan config:cache
 # interactif (nécessaire, Render exécute ce script sans TTY).
 php artisan migrate --force
 
+# Le Shell et les "One-Off Jobs" de Render sont réservés aux instances payantes
+# ("Starter" et plus) — impossible de lancer `php artisan db:seed` à la main
+# sur le tiers gratuit. On seed donc automatiquement au démarrage, mais
+# uniquement si la base est vide (aucun utilisateur), pour ne jamais dupliquer
+# les données de démonstration à chaque redémarrage/redéploiement du service.
+php artisan app:seed-if-empty
+
 # Le disque de Render (tiers gratuit) est éphémère : ce lien symbolique est
 # recréé à chaque démarrage, mais les fichiers déjà uploadés (photos de
 # profil, documents conducteur) ne survivent pas à un redéploiement. Pour une
