@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Palette "Crépuscule sur la Corniche" — dérivée du sujet (trajets Dakar–Rufisque–Diamniadio) */
+  --color-nuit-950: #081C1F;
+  --color-nuit-900: #0D2B2E;
+  --color-nuit-800: #12383C;
+  --color-nuit-700: #1B4B4F;
+  --color-nuit-600: #2A6367;
+
+  --color-sable-50: #FBF7EE;
+  --color-sable-100: #F5EDD9;
+  --color-sable-200: #EDE0BF;
+
+  --color-soleil-400: #F0B653;
+  --color-soleil-500: #E9A23B;
+  --color-soleil-600: #D68A24;
+
+  --color-braise-500: #DD5B2E;
+  --color-braise-600: #C44A20;
+
+  --color-lagune-400: #7BB6AC;
+  --color-lagune-500: #5E9B8B;
+  --color-lagune-600: #497D70;
+
+  --color-ardoise-600: #4A5A5C;
+
+  --font-display: 'Unbounded', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+/* Tokens sémantiques shadcn (mappés sur la palette Kaay Dem) */
+:root {
+  --background: var(--color-sable-50);
+  --foreground: var(--color-nuit-900);
+  --card: #ffffff;
+  --card-foreground: var(--color-nuit-900);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-nuit-900);
+  --primary: var(--color-nuit-800);
+  --primary-foreground: var(--color-sable-50);
+  --secondary: var(--color-soleil-500);
+  --secondary-foreground: var(--color-nuit-950);
+  --muted: var(--color-sable-100);
+  --muted-foreground: var(--color-ardoise-600);
+  --accent: var(--color-braise-500);
+  --accent-foreground: #ffffff;
+  --destructive: var(--color-braise-600);
+  --destructive-foreground: #ffffff;
+  --success: var(--color-lagune-600);
+  --success-foreground: #ffffff;
+  --border: var(--color-sable-200);
+  --input: var(--color-sable-200);
+  --ring: var(--color-soleil-500);
+  --radius: var(--radius-md);
+}
+
+.dark {
+  --background: var(--color-nuit-950);
+  --foreground: var(--color-sable-50);
+  --card: var(--color-nuit-900);
+  --card-foreground: var(--color-sable-50);
+  --popover: var(--color-nuit-900);
+  --popover-foreground: var(--color-sable-50);
+  --primary: var(--color-soleil-500);
+  --primary-foreground: var(--color-nuit-950);
+  --secondary: var(--color-nuit-700);
+  --secondary-foreground: var(--color-sable-50);
+  --muted: var(--color-nuit-800);
+  --muted-foreground: #A9BDBC;
+  --accent: var(--color-braise-500);
+  --accent-foreground: #ffffff;
+  --destructive: #E5654A;
+  --destructive-foreground: #ffffff;
+  --success: var(--color-lagune-400);
+  --success-foreground: var(--color-nuit-950);
+  --border: var(--color-nuit-700);
+  --input: var(--color-nuit-700);
+  --ring: var(--color-soleil-500);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-DEFAULT: var(--radius);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: light;
+    /* Filet de sécurité mobile : un débordement horizontal ponctuel (texte
+       long, composant tiers) ne doit jamais faire apparaître un scroll
+       horizontal sur toute la page — seul le contenu concerné doit gérer
+       son propre dépassement (troncature, défilement interne, etc.). */
+    overflow-x: hidden;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-feature-settings: 'tnum' 1, 'lnum' 1;
+    overflow-x: hidden;
+  }
+
+  /* Supprime le délai de zoom au double-tap sur les éléments interactifs :
+     déterminant sur mobile, où ce délai (~300ms) rend l'app perceptiblement
+     moins réactive qu'une vraie application native. */
+  a, button, input, select, textarea, [role='button'], [role='tab'] {
+    touch-action: manipulation;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-soleil-500);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Motif signature : ligne de trajet (route-line) — utilisé pour le hero, les cartes
+   de trajet et le stepper de statut de réservation. Un tiret + un point = une étape. */
+.route-line {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-soleil-500) 0 10px,
+    transparent 10px 18px
+  );
+  background-size: 18px 2px;
+  background-repeat: repeat-x;
+  background-position: left center;
+  height: 2px;
+}
+
+/* Point animé qui parcourt la ligne de trajet verticale (écrans auth). */
+@keyframes kaaydem-travel {
+  0%, 8% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  46%, 54% {
+    transform: translateY(128px);
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  92%, 100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+.animate-kaaydem-travel {
+  animation: kaaydem-travel 6s ease-in-out infinite;
+}
+
+/* Léger zoom continu ("Ken Burns") sur la photo active du diaporama du hero,
+   pour un rendu plus cinématique qu'une image parfaitement statique. Durée
+   volontairement longue et discrète (subtile jusqu'à 1.06x) pour ne jamais
+   distraire du contenu au premier plan (titre, formulaire de recherche). */
+@keyframes kaaydem-kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+.animate-kaaydem-kenburns {
+  animation: kaaydem-kenburns 8s ease-out forwards;
+}
+
+/* Leaflet utilise des z-index internes élevés (200 à 700) pour ordonner ses
+   propres calques (tuiles, marqueurs, popups). Sans isolation, ces valeurs
+   entrent en compétition directe avec nos dialogues/menus (z-50) et passent
+   par-dessus — ex. la boîte "Signaler" masquée par la carte du trajet.
+   En donnant un z-index explicite (même 0) au conteneur, on crée un nouveau
+   contexte d'empilement local : l'ordre interne de Leaflet est préservé, mais
+   il ne peut plus jamais dépasser un élément de l'interface en dehors de lui. */
+.leaflet-container {
+  z-index: 0;
+}
