@@ -15,8 +15,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->statefulApi();
-
+        // Pas de statefulApi() : l'authentification se fait exclusivement par
+        // Bearer token (Sanctum personal access tokens), jamais par cookies/session.
+        // statefulApi() active EnsureFrontendRequestsAreStateful, qui traite toute
+        // requête dont l'en-tête Origin/Referer correspond à SANCTUM_STATEFUL_DOMAINS
+        // comme une requête SPA "stateful" — ça ajoute alors EncryptCookies,
+        // StartSession et surtout ValidateCsrfToken au pipeline. Le frontend
+        // n'appelle jamais /sanctum/csrf-cookie et n'envoie pas de cookies
+        // (pas de withCredentials), donc cette requête échoue avec "CSRF token
+        // mismatch" avant même d'atteindre le contrôleur — un curl sans en-tête
+        // Origin ne déclenche pas ce chemin et fonctionne, ce qui rendait le bug
+        // invisible en test direct API mais bloquant depuis le vrai navigateur.
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
         ]);
