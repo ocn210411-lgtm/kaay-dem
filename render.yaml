@@ -29,8 +29,15 @@ services:
         value: production
       - key: APP_DEBUG
         value: "false"
+      # generateValue produit une chaîne aléatoire générique, PAS une clé au
+      # format attendu par Laravel (32 octets encodés en base64) — ça fait
+      # planter le chiffrement ("Unsupported cipher or incorrect key length").
+      # sync: false laisse le champ vide dans le Blueprint : Render demande
+      # de le renseigner à la main au moment du déploiement (ou depuis
+      # Environment ensuite). Générer une vraie clé avec :
+      #   php artisan key:generate --show
       - key: APP_KEY
-        generateValue: true
+        sync: false
       - key: APP_URL
         value: https://kaay-dem-backend.onrender.com
       - key: APP_LOCALE

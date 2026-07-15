@@ -194,8 +194,13 @@ section — pas seulement supposé fonctionner.
 1. **Pousser le code sur GitHub** (déjà fait si tu lis ce fichier depuis le dépôt cloné).
 2. Sur [render.com](https://render.com), **New** → **Blueprint** → connecter le dépôt GitHub
    `kaay-dem`. Render détecte automatiquement `render.yaml` et propose de créer les 3 services.
-3. Valider — Render construit et déploie l'API, le frontend et la base en quelques minutes.
-4. Rien d'autre à faire : le seeding se lance **automatiquement** au premier démarrage du backend
+3. Render demande de renseigner `APP_KEY` (volontairement laissée vide dans le Blueprint —
+   `generateValue` de Render ne produit pas une clé au bon format pour Laravel). Générer une vraie
+   clé en local avec `php artisan key:generate --show` (dans `backend/`) et coller le résultat
+   (`base64:...`) dans le champ. **Cette clé ne doit ensuite plus jamais changer** — elle chiffre
+   sessions/tokens existants.
+4. Valider — Render construit et déploie l'API, le frontend et la base en quelques minutes.
+5. Rien d'autre à faire : le seeding se lance **automatiquement** au premier démarrage du backend
    (voir plus bas — le Shell Render, nécessaire pour lancer `php artisan db:seed` à la main, est
    réservé aux instances payantes).
 
