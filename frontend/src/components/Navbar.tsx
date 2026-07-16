@@ -33,8 +33,15 @@ export function Navbar() {
       : undefined
 
   return (
+    // Bug WebKit connu : un élément `position: sticky` combiné à
+    // `backdrop-filter` (notre effet verre dépoli) peut, sur iOS Safari,
+    // rester visuellement bien placé après un défilement mais ne plus
+    // répondre au toucher tant qu'un nouveau recalcul de sa "compositing
+    // layer" n'est pas déclenché — d'où l'impression que le header "se
+    // rabat"/devient intouchable juste après avoir défilé. Forcer sa propre
+    // couche GPU (translateZ + will-change) le maintient toujours actif.
     <header
-      className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
+      className="sticky top-0 z-40 [transform:translateZ(0)] [-webkit-transform:translateZ(0)] will-change-transform border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <nav className="mx-auto max-w-6xl flex items-center justify-between gap-4 px-4 h-16">
