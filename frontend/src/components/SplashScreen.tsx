@@ -50,17 +50,19 @@ export function SplashScreen({ onTermine }: { onTermine: () => void }) {
       role="presentation"
       onClick={() => setEnSortie(true)}
       className={cn(
-        'fixed inset-0 z-[100] overflow-hidden bg-gradient-to-b from-nuit-950 via-nuit-900 to-nuit-950 transition-opacity ease-out cursor-pointer',
+        'fixed inset-0 z-[100] overflow-hidden bg-black transition-opacity ease-out cursor-pointer',
         enSortie ? 'opacity-0 pointer-events-none duration-500' : 'opacity-100 duration-0'
       )}
     >
-      {/* Lueurs d'ambiance, cohérentes avec le panneau de marque des écrans auth */}
+      {/* Fond quasi noir, à peine teinté (au lieu d'un dégradé sarcelle bien
+          visible) : la référence garde un noir très propre autour de la
+          voiture, c'est ce contraste qui rend les phares crédibles. */}
       <div
-        className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-soleil-500/10 blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-soleil-500/5 blur-3xl"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute -left-16 bottom-0 size-72 rounded-full bg-braise-500/10 blur-3xl"
+        className="pointer-events-none absolute -left-16 bottom-0 size-72 rounded-full bg-braise-500/5 blur-3xl"
         aria-hidden="true"
       />
 
@@ -88,7 +90,7 @@ export function SplashScreen({ onTermine }: { onTermine: () => void }) {
               vend l'illusion que la lumière des phares vient bien frapper le
               mur juste derrière "Kaay Dem !", comme sur la référence. */}
           <div
-            className="splash-glow-wash pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[130%] w-[160%] max-w-3xl -translate-x-1/2 -translate-y-1/2 rounded-full bg-soleil-400/25 blur-3xl"
+            className="splash-glow-wash pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[130%] w-[160%] max-w-3xl -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#fff3d6]/20 blur-3xl"
             aria-hidden="true"
           />
           <h1 className="splash-title font-display text-5xl font-extrabold tracking-tight sm:text-7xl">
@@ -106,18 +108,19 @@ export function SplashScreen({ onTermine }: { onTermine: () => void }) {
             cale exactement sur la largeur réelle de l'image, pour que les
             faisceaux (positionnés en %) tombent précisément sur ses phares. */}
         <div className="relative z-0 -mb-16 inline-block sm:-mb-20">
-          {/* Faisceaux en vrai cône : très resserrés au niveau des phares
-              (base de la forme via clip-path), très larges en haut — assez
-              larges pour couvrir toute la largeur du titre et donner
-              l'impression qu'ils l'éclairent réellement. */}
+          {/* Faisceaux en vrai cône, très flous (comme un halo de phare dans
+              l'air, pas une forme vectorielle nette) : blanc chaud plutôt que
+              doré saturé, bords adoucis au flou plutôt que tranchés par le
+              seul clip-path — dans l'esprit de la référence, où la lumière a
+              un vrai grain diffus, pas des triangles plats. */}
           <span
-            className="splash-beam absolute bottom-[97%] left-[39%] h-64 w-44 -translate-x-1/2 bg-gradient-to-t from-soleil-400/60 via-soleil-400/20 to-transparent sm:h-80 sm:w-64"
-            style={{ clipPath: 'polygon(47% 100%, 53% 100%, 100% 0%, 0% 0%)' }}
+            className="splash-beam absolute bottom-[97%] left-[39%] h-64 w-56 -translate-x-1/2 bg-gradient-to-t from-[#fff3d6]/50 via-[#fff3d6]/15 to-transparent blur-2xl sm:h-80 sm:w-72"
+            style={{ clipPath: 'polygon(46% 100%, 54% 100%, 100% 0%, 0% 0%)' }}
             aria-hidden="true"
           />
           <span
-            className="splash-beam splash-beam-2 absolute bottom-[97%] left-[65%] h-64 w-44 -translate-x-1/2 bg-gradient-to-t from-soleil-400/60 via-soleil-400/20 to-transparent sm:h-80 sm:w-64"
-            style={{ clipPath: 'polygon(47% 100%, 53% 100%, 100% 0%, 0% 0%)' }}
+            className="splash-beam splash-beam-2 absolute bottom-[97%] left-[65%] h-64 w-56 -translate-x-1/2 bg-gradient-to-t from-[#fff3d6]/50 via-[#fff3d6]/15 to-transparent blur-2xl sm:h-80 sm:w-72"
+            style={{ clipPath: 'polygon(46% 100%, 54% 100%, 100% 0%, 0% 0%)' }}
             aria-hidden="true"
           />
           <img

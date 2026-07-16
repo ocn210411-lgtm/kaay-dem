@@ -318,10 +318,13 @@
   }
   to {
     opacity: 1;
-    color: var(--color-soleil-400);
+    /* Blanc chaud plutôt que doré saturé, ombre resserrée plutôt qu'un grand
+       halo diffus : on veut l'effet "la lumière du phare vient éclairer les
+       lettres", pas une enseigne au néon qui brille toute seule. */
+    color: #f7e9c8;
     text-shadow:
-      0 0 30px rgba(240, 182, 83, 0.65),
-      0 0 70px rgba(233, 162, 59, 0.35);
+      0 0 14px rgba(255, 243, 214, 0.55),
+      0 0 34px rgba(240, 182, 83, 0.25);
     transform: translateY(0);
   }
 }
