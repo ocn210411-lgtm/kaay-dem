@@ -50,13 +50,13 @@ export function SplashScreen({ onTermine }: { onTermine: () => void }) {
       role="presentation"
       onClick={() => setEnSortie(true)}
       className={cn(
-        'fixed inset-0 z-[100] overflow-hidden bg-black transition-opacity ease-out cursor-pointer',
+        'fixed inset-0 z-[100] overflow-hidden bg-nuit-950 transition-opacity ease-out cursor-pointer',
         enSortie ? 'opacity-0 pointer-events-none duration-500' : 'opacity-100 duration-0'
       )}
     >
-      {/* Fond quasi noir, à peine teinté (au lieu d'un dégradé sarcelle bien
-          visible) : la référence garde un noir très propre autour de la
-          voiture, c'est ce contraste qui rend les phares crédibles. */}
+      {/* Vert de la marque (nuit-950), mais très sombre — proche du noir sans
+          être un noir pur, pour rester cohérent avec l'identité Kaay Dem tout
+          en gardant un fond propre qui rend les phares crédibles. */}
       <div
         className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-soleil-500/5 blur-3xl"
         aria-hidden="true"
