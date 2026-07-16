@@ -96,7 +96,10 @@ export function SplashScreen({ onTermine }: { onTermine: () => void }) {
           <h1 className="splash-title font-display text-5xl font-extrabold tracking-tight sm:text-7xl">
             Kaay Dem<span className="text-braise-500">!</span>
           </h1>
-          <p className="splash-slogan mt-4 font-mono text-xs uppercase tracking-[0.3em] text-soleil-200/90 sm:text-sm">
+          <p
+            className="splash-slogan relative z-10 mt-4 font-mono text-xs uppercase tracking-[0.3em] text-sable-50 sm:text-sm"
+            style={{ textShadow: '0 2px 10px rgba(0,0,0,0.85), 0 0 4px rgba(0,0,0,0.6)' }}
+          >
             Covoiturage étudiant · simple · sûr · solidaire
           </p>
         </div>
