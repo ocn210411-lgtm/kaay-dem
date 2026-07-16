@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Bell, Car, LayoutDashboard, LogOut, Shield, User as UserIcon } from 'lucide-react'
+import logoFull from '@/assets/brand/logo-full.png'
 
 export function Navbar() {
   const user = useAuthStore((s) => s.user)
@@ -37,10 +38,8 @@ export function Navbar() {
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <nav className="mx-auto max-w-6xl flex items-center justify-between gap-4 px-4 h-16">
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <span className="font-display font-bold text-lg text-nuit-800">
-            Kaay Dem<span className="text-braise-500">!</span>
-          </span>
+        <Link to="/" className="flex items-center shrink-0">
+          <img src={logoFull} alt="Kaay Dem !" className="h-5 w-auto sm:h-6" />
         </Link>
 
         <div className="flex items-center gap-2">

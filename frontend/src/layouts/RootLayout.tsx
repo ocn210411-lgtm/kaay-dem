@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Navbar } from '@/components/Navbar'
 import { Toaster } from '@/components/ui/sonner'
+import logoFull from '@/assets/brand/logo-full.png'
 
 export function RootLayout() {
   return (
@@ -15,8 +16,9 @@ export function RootLayout() {
       <main id="contenu-principal" className="flex-1">
         <Outlet />
       </main>
-      <footer className="border-t border-border py-6 text-center text-sm text-muted-foreground">
-        Kaay Dem ! — Covoiturage étudiant, où que tu ailles à Dakar et ses environs
+      <footer className="border-t border-border py-6 flex flex-col items-center gap-2 text-center text-sm text-muted-foreground">
+        <img src={logoFull} alt="Kaay Dem !" className="h-8 w-auto opacity-90" />
+        Covoiturage étudiant, où que tu ailles à Dakar et ses environs
       </footer>
       <Toaster position="top-center" richColors />
     </div>

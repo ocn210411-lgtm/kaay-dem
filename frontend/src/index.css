@@ -128,6 +128,15 @@
        connu, particulièrement sur Safari. `clip` bloque le débordement sans
        créer ce conteneur de scroll, donc sans effet de bord sur le sticky. */
     overflow-x: clip;
+    /* Réserve en permanence l'espace de la barre de défilement verticale.
+       Sans ça, l'ouverture d'un menu/dialogue Radix (DropdownMenu, Dialog…)
+       verrouille le défilement de la page le temps qu'il est ouvert — la
+       barre disparaît, tout le contenu "avance" de sa largeur, puis "recule"
+       à la fermeture quand elle réapparaît. C'est ce sursaut qui donnait
+       l'impression que le clic sur l'icône de profil faisait "reculer" le
+       Navbar. En réservant systématiquement cet espace, la barre ne peut
+       plus jamais apparaître/disparaître, donc plus aucun sursaut. */
+    scrollbar-gutter: stable;
   }
 
   html.dark {
@@ -221,6 +230,123 @@
 
 .animate-kaaydem-kenburns {
   animation: kaaydem-kenburns 8s ease-out forwards;
+}
+
+/* Écran de démarrage (SplashScreen) : la voiture "arrive", ses phares
+   illuminent le nom de l'app, le slogan suit. Chaque étape est un keyframe
+   indépendant avec son propre animation-delay, orchestré depuis le
+   composant React — voir src/components/SplashScreen.tsx. */
+@keyframes kaaydem-splash-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.splash-logo {
+  opacity: 0;
+  animation: kaaydem-splash-fade-up 0.7s ease-out 0.15s forwards;
+}
+
+.splash-slogan {
+  opacity: 0;
+  animation: kaaydem-splash-fade-up 0.7s ease-out 1.9s forwards;
+}
+
+/* Les deux faisceaux de phares : grandissent depuis le bas (comme un cône de
+   lumière qui s'allume) puis restent stables, en attendant le fondu de sortie. */
+@keyframes kaaydem-splash-beam {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0.75;
+    transform: scaleY(1);
+  }
+}
+
+.splash-beam {
+  transform-origin: bottom center;
+  opacity: 0;
+  animation: kaaydem-splash-beam 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.75s forwards;
+}
+
+.splash-beam-2 {
+  animation-delay: 0.9s;
+}
+
+/* Nappe de lumière radiale derrière le titre : sans elle, les faisceaux fins
+   restent visuellement "à côté" du texte plutôt que de sembler l'éclairer.
+   Synchronisée sur le même timing que les faisceaux et l'illumination du
+   titre, pour vendre l'idée que la lumière des phares tombe bien sur le mur
+   juste derrière "Kaay Dem !". */
+@keyframes kaaydem-splash-glow-wash {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.splash-glow-wash {
+  opacity: 0;
+  animation: kaaydem-splash-glow-wash 1.2s ease-out 0.9s forwards;
+}
+
+/* Le titre part d'une teinte sombre et "s'illumine" en or au moment précis où
+   les phares finissent de s'allumer — c'est la mise en scène demandée : la
+   voiture arrive avec ses lumières et révèle le nom de l'app. */
+@keyframes kaaydem-splash-illuminate {
+  from {
+    opacity: 0;
+    color: var(--color-nuit-700);
+    text-shadow: none;
+    transform: translateY(8px);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    color: var(--color-soleil-400);
+    text-shadow:
+      0 0 30px rgba(240, 182, 83, 0.65),
+      0 0 70px rgba(233, 162, 59, 0.35);
+    transform: translateY(0);
+  }
+}
+
+.splash-title {
+  opacity: 0;
+  animation: kaaydem-splash-illuminate 1.1s ease-out 1s forwards;
+}
+
+/* La voiture elle-même : glisse et apparaît juste avant que ses phares ne
+   s'allument. */
+@keyframes kaaydem-splash-car-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.splash-car {
+  opacity: 0;
+  animation: kaaydem-splash-car-in 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards;
 }
 
 /* Leaflet utilise des z-index internes élevés (200 à 700) pour ordonner ses

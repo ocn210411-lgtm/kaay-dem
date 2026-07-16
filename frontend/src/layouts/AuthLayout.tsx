@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import logoFull from '@/assets/brand/logo-full.png'
 
 // Illustration seulement : ni le départ ni la destination ne sont fixes —
 // chaque trajet a son propre point de départ et sa propre destination à
@@ -24,8 +25,8 @@ function BrandPanel({ quote, quoteAuthor }: { quote: string; quoteAuthor: string
       />
 
       <div className="relative">
-        <a href="/" className="font-display font-bold text-xl">
-          Kaay Dem<span className="text-braise-500">!</span>
+        <a href="/" className="inline-flex items-center">
+          <img src={logoFull} alt="Kaay Dem !" className="h-10 w-auto" />
         </a>
         <p className="font-mono text-xs text-soleil-400 tracking-widest uppercase mt-10">
           Covoiturage étudiant
