@@ -83,7 +83,7 @@ export function SplashScreen({ onTermine }: { onTermine: () => void }) {
       <div className="absolute inset-x-0 bottom-0 flex flex-col items-center">
         {/* z-10 : le titre doit rester lisible devant les faisceaux, qui
             remontent depuis les phares de la voiture juste en dessous. */}
-        <div className="relative z-10 mb-8 px-4 text-center sm:mb-14">
+        <div className="relative z-10 mb-40 px-4 text-center sm:mb-52">
           {/* Nappe de lumière derrière le titre : sans elle, les faisceaux
               (fins, loin en dessous) ne "touchent" jamais vraiment le texte à
               l'œil — cette tache radiale, synchronisée sur le même timing,
