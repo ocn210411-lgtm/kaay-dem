@@ -112,9 +112,14 @@ export function HomeSearch() {
           palette "Crépuscule sur la Corniche" et au sujet du produit (route, trajet, voiture). */}
       <section className="relative border-b border-border text-sable-50 overflow-hidden">
         <HeroSlideshow slides={HERO_SLIDES} activeIndex={imageIndex} />
-        {/* Superposition pour la lisibilité du texte, dans les tons de la marque */}
+        {/* Superposition pour la lisibilité du texte, dans les tons de la marque.
+            Nettement plus claire en bas sur mobile (from.../via.../to-nuit-950/35) :
+            avec le dégradé précédent (jusqu'à 90% d'opacité), la photo de fond
+            disparaissait presque entièrement derrière la carte de recherche —
+            or cette carte est déjà opaque, ce voile sombre n'apportait aucune
+            lisibilité supplémentaire à cet endroit, juste une photo invisible. */}
         <div
-          className="absolute inset-0 bg-gradient-to-b from-nuit-950/85 via-nuit-950/70 to-nuit-950/90"
+          className="absolute inset-0 bg-gradient-to-b from-nuit-950/75 via-nuit-950/45 to-nuit-950/35 sm:from-nuit-950/85 sm:via-nuit-950/70 sm:to-nuit-950/90"
           aria-hidden="true"
         />
         <div
@@ -122,7 +127,7 @@ export function HomeSearch() {
           aria-hidden="true"
         />
 
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:py-28">
+        <div className="relative mx-auto max-w-6xl px-4 py-14 sm:py-28">
           <p className="font-mono text-sm text-soleil-400 tracking-wide uppercase mb-3">
             Covoiturage étudiant
           </p>
@@ -139,12 +144,12 @@ export function HomeSearch() {
             arrivee={exempleArrivee}
             cycleKey={cycle}
             travelMs={TRAVEL_MS}
-            className="mt-8 max-w-md"
+            className="mt-6 max-w-md sm:mt-8"
           />
 
           <form
             onSubmit={handleSubmit}
-            className="mt-8 max-w-2xl bg-card text-card-foreground rounded-2xl shadow-2xl p-4 sm:p-4 grid grid-cols-1 sm:grid-cols-4 gap-3 sm:items-end"
+            className="mt-6 max-w-2xl bg-card text-card-foreground rounded-2xl shadow-2xl p-4 sm:mt-8 sm:p-4 grid grid-cols-1 sm:grid-cols-4 gap-3 sm:items-end"
           >
             <div className="relative flex flex-col gap-1.5">
               <Label htmlFor="depart">Départ</Label>
