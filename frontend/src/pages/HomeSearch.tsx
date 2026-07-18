@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { HeroSlideshow, type HeroSlide } from '@/components/HeroSlideshow'
 import { HeroRouteAnimation } from '@/components/HeroRouteAnimation'
-import { Search } from 'lucide-react'
+import { ArrowUpDown, CalendarDays, MapPin, Search } from 'lucide-react'
 import heroJumbo from '@/assets/jumbo-hero.jpg'
 import heroJumbo1200 from '@/assets/jumbo-hero-1200.jpg'
 import heroJumbo800 from '@/assets/jumbo-hero-800.jpg'
@@ -101,6 +101,11 @@ export function HomeSearch() {
     setSearchParams(next)
   }
 
+  function handleEchanger() {
+    setVilleDepart(villeArrivee)
+    setVilleArrivee(villeDepart)
+  }
+
   return (
     <div>
       {/* Hero — route côtière au coucher de soleil en fond plein écran, en écho direct à la
@@ -139,41 +144,86 @@ export function HomeSearch() {
 
           <form
             onSubmit={handleSubmit}
-            className="mt-8 max-w-2xl bg-card text-card-foreground rounded-xl shadow-2xl p-4 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end"
+            className="mt-8 max-w-2xl bg-card text-card-foreground rounded-2xl shadow-2xl p-4 sm:p-4 grid grid-cols-1 sm:grid-cols-4 gap-3 sm:items-end"
           >
-            <div className="flex flex-col gap-1.5">
+            <div className="relative flex flex-col gap-1.5">
               <Label htmlFor="depart">Départ</Label>
-              <Input
-                id="depart"
-                name="ville_depart"
-                autoComplete="off"
-                placeholder="Dakar"
-                value={villeDepart}
-                onChange={(e) => setVilleDepart(e.target.value)}
-              />
+              <div className="relative">
+                <MapPin
+                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-soleil-500"
+                  aria-hidden="true"
+                />
+                <Input
+                  id="depart"
+                  name="ville_depart"
+                  autoComplete="off"
+                  placeholder="Dakar"
+                  className="pl-9"
+                  value={villeDepart}
+                  onChange={(e) => setVilleDepart(e.target.value)}
+                />
+              </div>
             </div>
+
+            {/* Connecteur "ligne de trajet" + bouton d'inversion, visible en
+                mobile uniquement (les champs sont côte à côte dès sm:, le
+                geste d'inversion perd son intérêt visuel dans ce cas). Reprend
+                le motif signature de l'app (pointillés + points départ/arrivée). */}
+            <div className="relative -my-1.5 flex h-6 items-center pl-[18px] sm:hidden" aria-hidden="true">
+              <div className="h-6 border-l-2 border-dashed border-border" />
+              <button
+                type="button"
+                onClick={handleEchanger}
+                aria-label="Inverser le départ et l'arrivée"
+                aria-hidden="false"
+                className="absolute left-4 flex size-7 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition-transform hover:scale-110 hover:text-soleil-600 active:scale-95"
+              >
+                <ArrowUpDown className="size-3.5" aria-hidden="true" />
+              </button>
+            </div>
+
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="arrivee">Arrivée</Label>
-              <Input
-                id="arrivee"
-                name="ville_arrivee"
-                autoComplete="off"
-                placeholder="Diamniadio"
-                value={villeArrivee}
-                onChange={(e) => setVilleArrivee(e.target.value)}
-              />
+              <div className="relative">
+                <MapPin
+                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-braise-500"
+                  aria-hidden="true"
+                />
+                <Input
+                  id="arrivee"
+                  name="ville_arrivee"
+                  autoComplete="off"
+                  placeholder="Diamniadio"
+                  className="pl-9"
+                  value={villeArrivee}
+                  onChange={(e) => setVilleArrivee(e.target.value)}
+                />
+              </div>
             </div>
+
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="date">Date</Label>
-              <Input
-                id="date"
-                name="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
+              <div className="relative">
+                <CalendarDays
+                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <Input
+                  id="date"
+                  name="date"
+                  type="date"
+                  className="pl-9"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </div>
             </div>
-            <Button type="submit" className="bg-soleil-500 hover:bg-soleil-600 text-nuit-950 font-medium gap-2">
+
+            <Button
+              type="submit"
+              size="lg"
+              className="bg-soleil-500 hover:bg-soleil-600 text-nuit-950 font-semibold gap-2 shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            >
               <Search className="size-4" aria-hidden="true" />
               Rechercher
             </Button>
