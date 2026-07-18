@@ -147,9 +147,12 @@ export function HomeSearch() {
             className="mt-6 max-w-md sm:mt-8"
           />
 
+          {/* Carte "verre dépoli" plutôt qu'un bloc blanc opaque : la photo de
+              fond reste visible (en transparence/flou) même derrière la carte,
+              pas seulement autour — même traitement que le header (backdrop-blur). */}
           <form
             onSubmit={handleSubmit}
-            className="mt-6 max-w-2xl bg-card text-card-foreground rounded-2xl shadow-2xl p-4 sm:mt-8 sm:p-4 grid grid-cols-1 sm:grid-cols-4 gap-3 sm:items-end"
+            className="mt-6 max-w-2xl bg-card/60 text-card-foreground backdrop-blur-xl border border-white/25 rounded-2xl shadow-2xl p-4 sm:mt-8 sm:p-4 grid grid-cols-1 sm:grid-cols-4 gap-3 sm:items-end"
           >
             <div className="relative flex flex-col gap-1.5">
               <Label htmlFor="depart">Départ</Label>
@@ -163,7 +166,7 @@ export function HomeSearch() {
                   name="ville_depart"
                   autoComplete="off"
                   placeholder="Dakar"
-                  className="pl-9"
+                  className="pl-9 bg-white/90 border-white/60"
                   value={villeDepart}
                   onChange={(e) => setVilleDepart(e.target.value)}
                 />
@@ -181,7 +184,7 @@ export function HomeSearch() {
                 onClick={handleEchanger}
                 aria-label="Inverser le départ et l'arrivée"
                 aria-hidden="false"
-                className="absolute left-4 flex size-7 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition-transform hover:scale-110 hover:text-soleil-600 active:scale-95"
+                className="absolute left-4 flex size-7 -translate-x-1/2 items-center justify-center rounded-full border border-white/60 bg-white/90 text-muted-foreground shadow-sm transition-transform hover:scale-110 hover:text-soleil-600 active:scale-95"
               >
                 <ArrowUpDown className="size-3.5" aria-hidden="true" />
               </button>
@@ -199,7 +202,7 @@ export function HomeSearch() {
                   name="ville_arrivee"
                   autoComplete="off"
                   placeholder="Diamniadio"
-                  className="pl-9"
+                  className="pl-9 bg-white/90 border-white/60"
                   value={villeArrivee}
                   onChange={(e) => setVilleArrivee(e.target.value)}
                 />
@@ -217,7 +220,7 @@ export function HomeSearch() {
                   id="date"
                   name="date"
                   type="date"
-                  className="pl-9"
+                  className="pl-9 bg-white/90 border-white/60"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                 />
