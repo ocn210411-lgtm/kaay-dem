@@ -33,15 +33,8 @@ export function Navbar() {
       : undefined
 
   return (
-    // Bug WebKit connu : un élément `position: sticky` combiné à
-    // `backdrop-filter` (notre effet verre dépoli) peut, sur iOS Safari,
-    // rester visuellement bien placé après un défilement mais ne plus
-    // répondre au toucher tant qu'un nouveau recalcul de sa "compositing
-    // layer" n'est pas déclenché — d'où l'impression que le header "se
-    // rabat"/devient intouchable juste après avoir défilé. Forcer sa propre
-    // couche GPU (translateZ + will-change) le maintient toujours actif.
     <header
-      className="sticky top-0 z-40 [transform:translateZ(0)] [-webkit-transform:translateZ(0)] will-change-transform border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
+      className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <nav className="mx-auto max-w-6xl flex items-center justify-between gap-4 px-4 h-16">
@@ -63,7 +56,14 @@ export function Navbar() {
                 </Button>
               )}
 
-              <DropdownMenu>
+              {/* modal={false} : par défaut Radix verrouille le défilement de la
+                  page tant que ce menu est ouvert (en passant le body en
+                  `position: relative; overflow: hidden`) — après un défilement,
+                  ce changement casse le `position: sticky` du header, qui se
+                  met alors à défiler avec la page au lieu de rester collé en
+                  haut (le header "se rabat"/devient intouchable). Un simple
+                  menu de compte n'a pas besoin d'être modal. */}
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full ml-1" aria-label="Menu du compte">
                     <Avatar className="size-8">
